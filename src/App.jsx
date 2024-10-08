@@ -5,9 +5,26 @@ const App = () => {
   const [count, setCount] = useState(0);
   const [flip, setFlip] = useState(false);
 
-  const updateCount = () => {
-    setCount(Math.floor(Math.random() * 7));
-    setFlip(false);
+  const addCount = () => {
+    if (count === 6) {
+      setCount(0);
+      setFlip(false);
+    } else {
+      setCount(count + 1);
+      setFlip(false);
+    }
+    setCorrect("");
+  };
+
+  const cutCount = () => {
+    if (count === 0) {
+      setCount(6);
+      setFlip(false);
+    } else {
+      setCount(count - 1);
+      setFlip(false);
+    }
+    setCorrect("");
   };
 
   const changeFlip = () => {
@@ -28,6 +45,17 @@ const App = () => {
     { question: "../public/answerAlso2.png", answer: "2" },
   ];
 
+  const [answer, setAnswer] = useState("");
+  const [correct, setCorrect] = useState("");
+
+  const checkAnswer = () => {
+    if (answer === cards[count].answer) {
+      setCorrect("correct");
+    } else {
+      setCorrect("incorrect");
+    }
+  };
+
   return (
     <div className="App">
       <h1>Picking the Right Urinal</h1>
@@ -43,6 +71,8 @@ const App = () => {
           The Man's Book by Thomas Fink on Picking the Right Urinal
         </a>
         <br /> Number of cards: 7
+        <br /> (Hint: There may be 2 answers, answer in the format such as "1 or
+        6")
       </p>
       <div className="flip-card" onClick={changeFlip}>
         <div className="flip-card-inner">
@@ -57,8 +87,20 @@ const App = () => {
           </div>
         </div>
       </div>
-
-      <button onClick={updateCount}>Next</button>
+      <div className="answer-div">
+        <div className="answer-space" id={correct}>
+          <input
+            type="text"
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+          />
+        </div>
+        <button onClick={checkAnswer}>Submit Answer</button>
+      </div>
+      <div className="button">
+        <button onClick={cutCount}>Previous</button>
+        <button onClick={addCount}>Next</button>
+      </div>
     </div>
   );
 };
